@@ -34,7 +34,7 @@ Lo usa: cualquier persona que llega de redes/yodesarrollo.mx. Lo administra Alej
 - **El Sheet manda sobre el código.** Los ~133 textos del formulario se editan en `TEXTOS POTENCIAL`;
   `const TEXTOS` de `index.html:535` es solo respaldo. *(Si alguien "arregla" copy en el HTML, el Sheet
   se la pisa al siguiente load.)*
-- **`docs/webhook-apps-script.gs` y `docs/tarea-analisis-potencial.md` NO se publican** (`.gitignore:4-8`).
+- **`docs/webhook-apps-script.gs` y `docs/tarea-analisis-potencial.md` NO se publican** (`.gitignore:4` y `:5`; `docs/brief-board-redes.md` va en `:7`). Comprobado: `git ls-files docs` solo lista `docs/paridad.md`, y los dos dan **404** en `yodesarrollomx.github.io/plan-potencial/docs/…` (curl 2026-09-04).
   *(Llevan nombres de token y el esquema del CRM.)*
 - **Ningún secreto vuelve al repo.** `BOARD_SECRET` vive en Propiedades del script desde el commit
   `563ac5b`. *(Estuvo publicado en el README y en el .gs; se rotó el 1-ago, memoria `secretos-rotacion-1ago`.)*
