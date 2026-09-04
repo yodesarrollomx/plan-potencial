@@ -36,7 +36,7 @@ HTML estático de un solo archivo (`index.html`), sin build ni dependencias.
    de Apps Script, corre `sembrarTextos()`, publica como App web (acceso:
    cualquiera) y copia la URL `/exec`.
 2. **Pegar la URL** en `index.html` → `const WEBHOOK_URL = "…/exec";`.
-3. **Publicar** en GitHub Pages (repo `alexpueblag/plan-potencial`).
+3. **Publicar** en GitHub Pages (repo `yodesarrollomx/plan-potencial`).
 4. **Cambiar el link** "Plan de Potencial Personalizado" en yodesarrollo.mx por
    la nueva URL.
 5. **Instalar la routine** de `docs/tarea-analisis-potencial.md` en Cowork.
