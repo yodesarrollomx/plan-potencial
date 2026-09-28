@@ -2,6 +2,21 @@
 
 Lee este archivo completo antes de tocar nada.
 
+## ⚠️ ALERTA ACTIVA · 2026-09-28 · Rendimiento y SEO técnico
+
+- **Cambio:** Leaflet y su CSS ya no se cargan en la primera pantalla; se solicitan solo al entrar al paso 2
+  del mapa. Google Fonts se precarga sin bloquear el primer render y Meta Pixel se inicializa en la primera
+  interacción o como respaldo 2 segundos después de `load`, con cola de eventos.
+- **SEO agregado:** canonical, robots index/follow, Open Graph, Twitter Card, schema `WebPage`/`Organization`,
+  dimensiones explícitas del logo y `sitemap.xml` con las URLs públicas indexables.
+- **Motivo:** la medición previa de Lighthouse dio Performance 83, recursos bloqueantes con ahorro estimado de
+  860 ms y 306 KiB transferidos; Leaflet se descargaba aunque el visitante no llegara al mapa.
+- **Regla para Claude:** no volver a poner Leaflet, CSS del mapa ni scripts pesados de analítica en el `<head>`
+  como recursos síncronos. Si se añade una dependencia, debe justificar su costo inicial y actualizar la medición.
+- **Contrato conservado:** formulario, Apps Script, CRM, folios, UTMs, Meta Pixel y eventos no cambian de nombre
+  ni de payload; los eventos de Meta se encolan mientras el píxel termina de cargar.
+- **Registro y validación:** leer `CAMBIOS-MANUS.md` y repetir las mediciones antes/después.
+
 ## ⚠️ ALERTA ACTIVA · 2026-09-28 · Conversión del paso de contacto
 
 - **Cambio:** el gate muestra por defecto solo Nombre + WhatsApp. El correo secundario es opcional y permanece
