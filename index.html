@@ -375,12 +375,24 @@
       <p class="qpasa-riesgo" data-txt="p5_riesgo">No te vamos a vender nada en la llamada: no necesitas decidir nada ahí. Es sin costo y sin compromiso, y sales con una respuesta.</p>
     </div>
     <div class="gate">
-      <div class="field"><input id="gNombre" data-ph="ph_nombre" placeholder="Tu nombre" oninput="S.nombre=this.value"></div>
-      <div class="field"><input id="gContact" data-ph="ph_contacto" type="tel" inputmode="tel" placeholder="Tu WhatsApp"></div>
-      <button class="gate-toggle" id="gateToggle" onclick="toggleContacto()" data-txt="gate_toggle_correo">Prefiero por correo →</button>
-      <div class="field"><input id="gEmail2" data-ph="ph_email" type="email" inputmode="email" placeholder="Tu correo (para confirmar tu videollamada)"></div>
+      <div class="field">
+        <label for="gNombre" data-txt="gate_nombre_lbl">Nombre</label>
+        <input id="gNombre" data-ph="ph_nombre" placeholder="Tu nombre" autocomplete="name" aria-required="true" oninput="S.nombre=this.value">
+      </div>
+      <div class="field">
+        <label for="gContact" id="gateContactLabel" data-txt="gate_whats_lbl">WhatsApp</label>
+        <small id="gateContactHelp" data-txt="gate_whats_help">Lo usaremos para coordinar tu videollamada.</small>
+        <input id="gContact" data-ph="ph_contacto" type="tel" inputmode="tel" autocomplete="tel" aria-required="true" aria-describedby="gateContactHelp" placeholder="Tu WhatsApp">
+      </div>
+      <button type="button" class="gate-toggle" id="gateToggle" onclick="toggleContacto()" data-txt="gate_toggle_correo">Prefiero por correo →</button>
+      <button type="button" class="gate-toggle" id="emailExtraToggle" onclick="toggleEmailOpcional()" data-txt="gate_email_extra_btn">Agregar correo opcional</button>
+      <div class="field" id="emailExtraWrap" style="display:none">
+        <label for="gEmail2" data-txt="gate_email_extra_lbl">Correo (opcional)</label>
+        <small data-txt="gate_email_extra_help">Útil para enviarte la confirmación de la videollamada.</small>
+        <input id="gEmail2" data-ph="ph_email" type="email" inputmode="email" autocomplete="email" placeholder="tu@correo.com">
+      </div>
       <button class="btn" style="width:100%" onclick="revelar()" data-txt="gate_btn">Agendar mi videollamada →</button>
-      <p class="msg" id="gateMsg"></p>
+      <p class="msg" id="gateMsg" role="alert" aria-live="polite"></p>
       <div class="candado">
         <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
         <span data-txt="gate_candado">Yodesarrollo SAPI usa tus datos solo para contactarte y preparar tu análisis. Sin spam. Consulta el <a href="aviso-privacidad.html" target="_blank" style="color:var(--indigo)">Aviso de Privacidad</a>.</span>
@@ -693,17 +705,33 @@ function contUbic(){
 /* ---------- Gate de contacto (WhatsApp por default, correo alterno) ---------- */
 function toggleContacto(){
   const inp=document.getElementById("gContact"), tg=document.getElementById("gateToggle");
-  const em=document.getElementById("gEmail2");
+  const lbl=document.getElementById("gateContactLabel"), help=document.getElementById("gateContactHelp");
+  const extra=document.getElementById("emailExtraWrap"), extraTg=document.getElementById("emailExtraToggle");
   if((S.contactoTipo||"whatsapp")==="whatsapp"){
     S.contactoTipo="correo"; inp.type="email"; inp.setAttribute("inputmode","email");
-    inp.placeholder=T("ph_email","Tu correo"); em.style.display="none";
+    inp.setAttribute("autocomplete","email"); inp.placeholder=T("ph_email","tu@correo.com");
+    if(lbl)lbl.textContent=T("gate_correo_lbl","Correo");
+    if(help)help.textContent=T("gate_correo_help","Lo usaremos para coordinar tu videollamada.");
+    if(extra)extra.style.display="none"; if(extraTg)extraTg.style.display="none";
     if(tg)tg.textContent=T("gate_toggle_whats","Prefiero por WhatsApp →");
   }else{
     S.contactoTipo="whatsapp"; inp.type="tel"; inp.setAttribute("inputmode","tel");
-    inp.placeholder=T("ph_contacto","Tu WhatsApp"); em.style.display="";
+    inp.setAttribute("autocomplete","tel");
+    inp.placeholder=T("ph_contacto","Tu WhatsApp"); if(extra)extra.style.display="none";
+    if(lbl)lbl.textContent=T("gate_whats_lbl","WhatsApp");
+    if(help)help.textContent=T("gate_whats_help","Lo usaremos para coordinar tu videollamada.");
+    if(extraTg)extraTg.style.display="";
     if(tg)tg.textContent=T("gate_toggle_correo","Prefiero por correo →");
   }
-  inp.value=""; inp.focus();
+  inp.value=""; inp.removeAttribute("aria-invalid"); inp.focus();
+}
+function toggleEmailOpcional(){
+  const wrap=document.getElementById("emailExtraWrap"), tg=document.getElementById("emailExtraToggle");
+  if(!wrap)return;
+  const abrir=wrap.style.display==="none";
+  wrap.style.display=abrir?"":"none";
+  if(tg)tg.textContent=abrir?T("gate_email_extra_close","Ocultar correo opcional"):T("gate_email_extra_btn","Agregar correo opcional");
+  if(abrir){const em=document.getElementById("gEmail2");if(em)em.focus();}
 }
 
 /* ---------- Folio ---------- */
@@ -754,19 +782,28 @@ function reintentarPendientes(){
 /* ---------- Cierre / reveal ---------- */
 function revelar(){
   S.nombre=document.getElementById("gNombre").value.trim();
-  const val=document.getElementById("gContact").value.trim();
+  const contact=document.getElementById("gContact");
+  const val=contact.value.trim();
   const tipo=S.contactoTipo||"whatsapp";
   const emailExtra=document.getElementById("gEmail2").value.trim();
   let okContacto=false;
+  const okEmailExtra=!emailExtra||/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(emailExtra);
   if(tipo==="correo"){S.email=val.toLowerCase();S.tel="";okContacto=/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.email);}
-  else{S.tel=val;S.email=emailExtra.toLowerCase();okContacto=val.replace(/\D/g,"").length>=10;}
+  else{
+    const digitos=val.replace(/\D/g,"");
+    S.tel=val;S.email=emailExtra.toLowerCase();okContacto=digitos.length>=10&&digitos.length<=15;
+  }
   const msg=document.getElementById("gateMsg");
-  if(!S.nombre||!okContacto){
-    msg.textContent=(!S.nombre?"Déjanos tu nombre.":(tipo==="correo"?"Escribe un correo válido.":"Escribe un WhatsApp válido (10 dígitos)."));
+  if(!S.nombre||!okContacto||!okEmailExtra){
+    msg.textContent=(!S.nombre?"Déjanos tu nombre.":(!okEmailExtra?"Revisa el correo opcional o déjalo vacío.":(tipo==="correo"?"Escribe un correo válido.":"Escribe un WhatsApp válido de 10 a 15 dígitos.")));
     msg.style.display="block";
-    document.getElementById(!S.nombre?"gNombre":"gContact").focus();
+    const invalido=document.getElementById(!S.nombre?"gNombre":(!okEmailExtra?"gEmail2":"gContact"));
+    invalido.setAttribute("aria-invalid","true"); invalido.focus();
     return;
   }
+  document.getElementById("gNombre").removeAttribute("aria-invalid");
+  contact.removeAttribute("aria-invalid");
+  document.getElementById("gEmail2").removeAttribute("aria-invalid");
   msg.style.display="none";
   const folio=nuevoFolio(S.nombre); window.__folio=folio;
   const primer=S.nombre.split(" ")[0];
