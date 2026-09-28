@@ -11,6 +11,8 @@ Lee este archivo completo antes de tocar nada.
   dimensiones explícitas del logo y `sitemap.xml` con las URLs públicas indexables.
 - **Motivo:** la medición previa de Lighthouse dio Performance 83, recursos bloqueantes con ahorro estimado de
   860 ms y 306 KiB transferidos; Leaflet se descargaba aunque el visitante no llegara al mapa.
+- **Resultado público:** Lighthouse posterior dio Performance 87, FCP 1.7 s, TBT 380 ms, 267 KiB transferidos,
+  cero recursos bloqueantes detectados y cero solicitudes de Leaflet en la carga inicial.
 - **Regla para Claude:** no volver a poner Leaflet, CSS del mapa ni scripts pesados de analítica en el `<head>`
   como recursos síncronos. Si se añade una dependencia, debe justificar su costo inicial y actualizar la medición.
 - **Contrato conservado:** formulario, Apps Script, CRM, folios, UTMs, Meta Pixel y eventos no cambian de nombre

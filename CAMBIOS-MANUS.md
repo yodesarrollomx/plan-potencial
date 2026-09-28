@@ -60,6 +60,26 @@ de frontend y metadatos, no de datos ni backend.
 Toda dependencia nueva debe cargarse bajo demanda si no es necesaria para la primera pantalla. Todo cambio de
 canonical, robots, schema o URL pública debe actualizar también este registro y la alerta de `CLAUDE.md`.
 
+### Resultado público verificado
+
+Lighthouse ejecutado sobre `https://yodesarrollomx.github.io/plan-potencial/?audit=public-final` después del
+despliegue:
+
+- Performance: **87/100** (antes **83/100**).
+- SEO: **100/100**.
+- FCP: **1.7 s** (antes **2.1 s**).
+- LCP: **2.6 s**.
+- TBT: **380 ms** (antes **490 ms**).
+- CLS: **0**.
+- Transferencia: **267 KiB** (antes **306 KiB**).
+- Recursos bloqueantes: **ninguno detectado** (antes ahorro estimado de 860 ms).
+- Leaflet en carga inicial: **0 solicitudes**; al abrir el paso 2: **1 JS + 1 CSS**.
+- `sitemap.xml`: público, XML válido y con **2 URLs**.
+
+Las métricas de Lighthouse pueden variar entre corridas; las comparaciones deben repetirse con la misma URL,
+configuración y condiciones. La prueba funcional pública confirmó que la analítica diferida no se inicia antes de
+la interacción/timeout y que el mapa conserva su instrucción después de cargar.
+
 ## 2026-09-28 · Paso de contacto: menos fricción y datos más válidos
 
 ### Objetivo de negocio
