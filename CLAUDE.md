@@ -2,6 +2,19 @@
 
 Lee este archivo completo antes de tocar nada.
 
+## ⚠️ ALERTA ACTIVA · 2026-09-28 · Mensaje para aportación de capital
+
+- **Cambio:** `otra_capital_d` ya no publica una cifra anual aislada. El texto aprobado es:
+  **“Participar en proyectos que califiquen, con información y riesgos definidos por proyecto.”**
+- **Motivo de negocio:** filtrar mejor el interés de capital, evitar una garantía implícita y reservar cifras,
+  plazos, costos y riesgos para la información vigente de cada proyecto.
+- **Capas actualizadas:** respaldo `OTRAS` de `index.html` y celda `TEXTOS POTENCIAL!B90` del Sheet vivo.
+- **No se tocó:** Apps Script, endpoints, folios, CRM, Meta Pixel, eventos ni lógica de captación.
+- **Regla para Claude:** no reintroducir porcentajes, “rendimiento asegurado”, “inversión segura” o una
+  promesa equivalente sin aprobación escrita de Dirección y Legal, con proyecto, fecha, supuestos, plazo,
+  costos y riesgos definidos.
+- **Registro completo y reversión:** leer `CAMBIOS-MANUS.md` antes de editar copy comercial.
+
 ## Qué es
 
 Formulario público por pasos para **dueños de terreno**. Es el PRIMER contacto del embudo de
