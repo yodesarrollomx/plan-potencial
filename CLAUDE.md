@@ -2,6 +2,19 @@
 
 Lee este archivo completo antes de tocar nada.
 
+## ⚠️ ALERTA ACTIVA · 2026-09-28 · Conversión del paso de contacto
+
+- **Cambio:** el gate muestra por defecto solo Nombre + WhatsApp. El correo secundario es opcional y permanece
+  colapsado hasta que la persona decide agregarlo; “Prefiero por correo” cambia el medio principal.
+- **Motivo de negocio:** reducir campos visibles y ambigüedad en el momento de mayor intención, sin perder la
+  posibilidad de capturar correo ni separar la preferencia de contacto.
+- **Calidad del lead:** WhatsApp acepta entre 10 y 15 dígitos, el correo opcional se valida solo si fue escrito,
+  y los errores mueven foco y anuncian `aria-invalid`/`aria-live`.
+- **Accesibilidad:** Nombre, WhatsApp/Correo y correo opcional tienen labels, autocomplete y ayudas asociadas.
+- **Contrato conservado:** el payload mantiene `nombre`, `tel`, `email` y `contacto_canal`; no se tocó Apps Script.
+- **Regla para Claude:** no volver a mostrar el correo secundario por defecto ni añadir campos al gate sin una
+  hipótesis medible y revisión de privacidad. Leer `CAMBIOS-MANUS.md` para validación y reversión.
+
 ## ⚠️ ALERTA ACTIVA · 2026-09-28 · Mensaje para aportación de capital
 
 - **Cambio:** `otra_capital_d` ya no publica una cifra anual aislada. El texto aprobado es:
