@@ -2,6 +2,64 @@
 
 Este archivo complementa `CLAUDE.md`. Claude y cualquier mantenedor deben leer ambos antes de modificar mensajes comerciales, medición o integraciones.
 
+## 2026-09-28 · Velocidad inicial y SEO técnico
+
+### Objetivo
+
+Mejorar la primera carga de la plataforma y facilitar que los buscadores entiendan cuál es la URL canónica,
+qué representa la página y cuáles URLs públicas deben descubrir. La optimización no cambia el embudo ni sus datos.
+
+### Evidencia previa
+
+Auditoría Lighthouse sobre `https://yodesarrollomx.github.io/plan-potencial/` antes del cambio:
+
+- Performance: **83/100**.
+- SEO: **100/100**, pero sin canonical ni structured data reportados como auditorías aplicables.
+- Recursos bloqueantes: ahorro estimado de **860 ms**.
+- Transferencia total: **306 KiB**.
+- Leaflet se descargaba en la primera pantalla aunque el mapa está en el paso 2.
+- La carga inicial incluía Leaflet JS (~147.6 KiB de recurso), Leaflet CSS (~14.8 KiB), fuentes y Meta Pixel.
+
+### Cambios realizados
+
+1. Se retiraron Leaflet JS/CSS del `<head>`.
+2. Se creó `cargarLeaflet()`: inserta la dependencia solo al entrar al mapa, con promesa compartida y mensaje
+   de carga/error. El mapa de cierre reutiliza el mismo cargador.
+3. Google Fonts pasó de stylesheet bloqueante a `preload` con fallback `<noscript>`.
+4. Meta Pixel se inicia en la primera interacción (`pointerdown`, teclado o touch) o como respaldo 2 segundos
+   después de `load`, y mantiene una cola para no perder `PageView`, `PasoEmbudo`, `Lead`, `Schedule` o
+   `Contact` durante la carga diferida.
+5. Se añadió canonical a la casa pública de `yodesarrollomx.github.io`.
+6. Se añadieron robots index/follow, Open Graph, Twitter Card y schema `WebPage` + `Organization`.
+7. El logo obtuvo `width`, `height`, `decoding` y `fetchpriority` para reservar espacio y reducir CLS.
+8. Se añadió `sitemap.xml` con la landing y el aviso de privacidad.
+
+### Contrato no modificado
+
+No cambiaron Apps Script, endpoint, payloads, folios, UTMs, CRM, eventos, nombres de campos ni reglas de
+captación. La única diferencia de analítica es el momento de inicialización; los eventos se encolan y luego se
+envían en el mismo orden.
+
+### Validación requerida
+
+1. `node --check` sobre los scripts inline.
+2. La carga inicial no solicita `leaflet.js` ni `leaflet.css`.
+3. Al ir al paso 2, Leaflet se solicita una sola vez y el mapa se inicializa.
+4. El flujo de cierre conserva mapa, ubicación y navegación.
+5. La cola de Meta conserva eventos emitidos antes de la inicialización.
+6. Canonical, robots, Open Graph, schema y sitemap son accesibles desde la versión pública.
+7. Repetir Lighthouse con la misma URL y comparar FCP, LCP, TBT, recursos bloqueantes y transferencia.
+
+### Reversión
+
+Revertir el commit de este cambio y eliminar `sitemap.xml`. No revertir el Sheet ni Apps Script: esta mejora es
+de frontend y metadatos, no de datos ni backend.
+
+### Regla permanente
+
+Toda dependencia nueva debe cargarse bajo demanda si no es necesaria para la primera pantalla. Todo cambio de
+canonical, robots, schema o URL pública debe actualizar también este registro y la alerta de `CLAUDE.md`.
+
 ## 2026-09-28 · Paso de contacto: menos fricción y datos más válidos
 
 ### Objetivo de negocio

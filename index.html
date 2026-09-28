@@ -3,14 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Despierta tu Terreno · Yodesarrollo</title>
+<title>Despierta tu Terreno | Yo Desarrollo</title>
 <meta name="description" content="Descubre el potencial de tu terreno en 2 minutos. Agenda una videollamada gratis con tu Masterdeveloper. Tu terreno sigue a tu nombre.">
+<link rel="canonical" href="https://yodesarrollomx.github.io/plan-potencial/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#013e42">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta property="og:title" content="Despierta tu Terreno | Yo Desarrollo">
+<meta property="og:description" content="Descubre el potencial de tu terreno y agenda una videollamada sin costo.">
+<meta property="og:url" content="https://yodesarrollomx.github.io/plan-potencial/">
+<meta property="og:site_name" content="Yo Desarrollo">
+<meta property="og:image" content="https://yodesarrollomx.github.io/plan-potencial/img/yod-logo.png">
+<meta property="og:image:alt" content="Yo Desarrollo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Despierta tu Terreno | Yo Desarrollo">
+<meta name="twitter:description" content="Descubre el potencial de tu terreno y agenda una videollamada sin costo.">
+<meta name="twitter:image" content="https://yodesarrollomx.github.io/plan-potencial/img/yod-logo.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23013e42'/%3E%3Ctext x='50' y='70' font-family='Georgia,serif' font-size='52' font-weight='700' fill='%23fff' text-anchor='middle'%3EYD%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet"></noscript>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebPage",
+  "@id":"https://yodesarrollomx.github.io/plan-potencial/#webpage",
+  "url":"https://yodesarrollomx.github.io/plan-potencial/",
+  "name":"Despierta tu Terreno | Yo Desarrollo",
+  "description":"Descubre el potencial de tu terreno y agenda una videollamada sin costo.",
+  "inLanguage":"es-MX",
+  "isPartOf":{
+    "@type":"WebSite",
+    "name":"Yo Desarrollo",
+    "url":"https://www.yodesarrollo.mx/"
+  },
+  "publisher":{
+    "@type":"Organization",
+    "name":"Yo Desarrollo",
+    "url":"https://www.yodesarrollo.mx/",
+    "logo":"https://yodesarrollomx.github.io/plan-potencial/img/yod-logo.png"
+  }
+}
+</script>
 <style>
   :root{
     /* Paleta REAL de yodesarrollo.mx (medida por área): blanco/crema + negro
@@ -221,7 +257,7 @@
 
 <header>
   <div class="logo" id="logo">
-    <img class="logo-img" src="img/yod-logo.png" alt="Yodesarrollo">
+    <img class="logo-img" src="img/yod-logo.png" alt="Yo Desarrollo" width="1200" height="166" decoding="async" fetchpriority="high">
   </div>
   <div class="prog-wrap"><div class="progress" id="progress"></div><div id="pasoTxt"></div></div>
 </header>
@@ -509,16 +545,43 @@ const AGENDA_URL = "https://calendar.app.google/aoxnSs1WVrkhXFLw6";  /* "Agendar
 /* Píxel de Meta — el MISMO que usa el cuestionario de arquitectura
    (aurum-experiencia), para medir todo con una sola fuente. Vacío = apagado. */
 const META_PIXEL_ID = "1563269895817275"; /* Pixel "Aurum Arquitectos" (Meta) */
-(function(){
-  if(!META_PIXEL_ID) return;
+const __metaQueue=[];
+function cargarMetaPixel(){
+  if(!META_PIXEL_ID || window.__metaLoaded) return;
+  window.__metaLoaded=true;
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
   t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
   document,'script','https://connect.facebook.net/en_US/fbevents.js');
   fbq('init',META_PIXEL_ID); fbq('track','PageView');
-})();
-function pix(){ if(window.fbq && META_PIXEL_ID){ try{ fbq.apply(null,arguments); }catch(e){} } }
+  while(__metaQueue.length){
+    const args=__metaQueue.shift();
+    try{ fbq.apply(null,args); }catch(e){}
+  }
+}
+function programarMetaPixel(){
+  if(!META_PIXEL_ID) return;
+  let iniciado=false;
+  const eventos=["pointerdown","keydown","touchstart"];
+  const iniciar=function(){
+    if(iniciado) return;
+    iniciado=true;
+    eventos.forEach(function(ev){window.removeEventListener(ev,iniciar);});
+    cargarMetaPixel();
+  };
+  eventos.forEach(function(ev){window.addEventListener(ev,iniciar,{passive:true});});
+  const respaldo=function(){window.setTimeout(iniciar,2000);};
+  if(document.readyState==="complete") respaldo();
+  else window.addEventListener("load",respaldo,{once:true});
+}
+function pix(){
+  if(!META_PIXEL_ID) return;
+  const args=Array.from(arguments);
+  if(!window.__metaLoaded){ __metaQueue.push(args); return; }
+  if(window.fbq){ try{ fbq.apply(null,args); }catch(e){} }
+}
+programarMetaPixel();
 
 /* ---------- Estado ---------- */
 const S0 = {
@@ -875,7 +938,12 @@ let __revealMap=null;
 function montarRevealMapa(){
   const wrap=document.getElementById("revealMapWrap");
   if(!wrap) return;
-  if(!(S.lat&&S.lng) || typeof L==="undefined"){ wrap.style.display="none"; return; }
+  if(!(S.lat&&S.lng)){ wrap.style.display="none"; return; }
+  if(typeof L==="undefined"){
+    wrap.style.display="none";
+    cargarLeaflet().then(montarRevealMapa).catch(function(){});
+    return;
+  }
   wrap.style.display="";
   if(__revealMap){ __revealMap.setView([S.lat,S.lng],17); setTimeout(function(){__revealMap.invalidateSize();},250); return; }
   setTimeout(function(){
@@ -1004,8 +1072,26 @@ function renderLogo(){
 }
 
 /* ---------- Mapa (Leaflet + satélite Esri, sin API key) ---------- */
-let __map=null, __marker=null;
+let __map=null, __marker=null, __leafletPromise=null;
+const LEAFLET_JS="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js";
+const LEAFLET_CSS="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css";
 const HMO=[29.0729,-110.9559];  /* centro por defecto: Hermosillo */
+function cargarLeaflet(){
+  if(typeof L!=="undefined") return Promise.resolve();
+  if(__leafletPromise) return __leafletPromise;
+  __leafletPromise=new Promise(function(resolve,reject){
+    const css=document.createElement("link");
+    css.rel="stylesheet"; css.href=LEAFLET_CSS; css.dataset.yodLeaflet="";
+    const js=document.createElement("script");
+    js.src=LEAFLET_JS; js.async=true; js.dataset.yodLeaflet="";
+    let cssOk=false,jsOk=false,done=false;
+    function finish(){if(!done&&cssOk&&jsOk){done=true;resolve();}}
+    css.onload=function(){cssOk=true;finish()}; css.onerror=reject;
+    js.onload=function(){jsOk=true;finish()}; js.onerror=reject;
+    document.head.appendChild(css); document.head.appendChild(js);
+  });
+  return __leafletPromise;
+}
 function setPin(lat,lng,centrar){
   S.lat=+lat; S.lng=+lng;
   S.geo="https://www.google.com/maps?q="+S.lat+","+S.lng;  /* link para el CRM */
@@ -1016,7 +1102,15 @@ function setPin(lat,lng,centrar){
   guardarS();
 }
 function initMapa(){
-  if(__map || typeof L==="undefined") return;
+  if(__map) return;
+  if(typeof L==="undefined"){
+    const h=document.getElementById("mapHint");
+    if(h){ h.classList.remove("ok"); h.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 21s7-6.5 7-11a7 7 0 10-14 0c0 4.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg> Cargando mapa…'; }
+    cargarLeaflet().then(initMapa).catch(function(){
+      if(h)h.innerHTML="No pudimos cargar el mapa — puedes escribir la dirección manualmente.";
+    });
+    return;
+  }
   const start = (S.lat&&S.lng)?[S.lat,S.lng]:HMO;
   __map=L.map("map",{zoomControl:true,attributionControl:true}).setView(start, (S.lat?17:12));
   L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -1027,6 +1121,10 @@ function initMapa(){
   __marker.on("dragend",function(e){ const p=e.target.getLatLng(); setPin(p.lat,p.lng,false); });
   __map.on("click",function(e){ setPin(e.latlng.lat,e.latlng.lng,false); });
   if(S.lat&&S.lng) setPin(S.lat,S.lng,false);
+  else{
+    const h=document.getElementById("mapHint");
+    if(h)h.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 21s7-6.5 7-11a7 7 0 10-14 0c0 4.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg> '+T("p2_geo_help","Busca la zona y arrastra el pin sobre tu terreno");
+  }
   setTimeout(function(){ __map.invalidateSize(); },200);  /* el contenedor estaba oculto */
 }
 function buscarMapa(q){
