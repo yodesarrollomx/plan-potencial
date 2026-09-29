@@ -232,6 +232,11 @@
   .agenda-pasos li{counter-increment:p;position:relative;padding:8px 0 8px 36px;font-size:13.5px;color:var(--carbon);border-bottom:1px dotted var(--linea);}
   .agenda-pasos li:last-child{border-bottom:none;}
   .agenda-pasos li::before{content:counter(p);position:absolute;left:0;top:7px;width:24px;height:24px;border:1px solid var(--vino);border-radius:50%;color:var(--vino);font-family:Georgia,serif;font-size:12px;display:flex;align-items:center;justify-content:center;}
+  .referral-box{order:2;margin-top:18px;padding:20px;border:1px solid #cfe0e0;border-radius:12px;background:var(--lavanda);}
+  .referral-box h3{font-family:Georgia,serif;font-size:19px;font-weight:normal;margin-bottom:7px;}
+  .referral-box p{font-size:13.5px;color:var(--carbon);line-height:1.5;margin-bottom:14px;}
+  .referral-box .btn{width:100%;background:#fff;}
+  .referral-box .share-msg{min-height:18px;margin:9px 0 0;font-size:12px;color:var(--teal);font-weight:700;}
   .nota{font-size:11px;color:var(--piedra);font-style:italic;line-height:1.5;margin-top:14px;order:3;}
   #gracias{display:none;text-align:center;padding:60px 20px;}
   #gracias .big{font-family:Georgia,serif;font-size:30px;margin:14px 0;}
@@ -499,6 +504,13 @@
 
       <div class="agenda-embed" id="agendaSlot"></div>
 
+      <div class="referral-box" id="referralBox">
+        <h3 data-txt="ref_titulo">¿Conoces a alguien con un terreno detenido?</h3>
+        <p data-txt="ref_texto">Compártele este primer paso para que pueda ordenar su caso y agendar una videollamada inicial sin costo.</p>
+        <button class="btn btn-ghost" type="button" id="refShareBtn" onclick="compartirPlan()" data-txt="ref_btn">Compartir con alguien que tiene terreno</button>
+        <p class="share-msg" id="refShareMsg" role="status" aria-live="polite"></p>
+      </div>
+
       <div class="mdev" id="mdevCard">
         <div class="foto" id="mdevFoto">AP</div>
         <div>
@@ -541,6 +553,7 @@ const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw3EB-6Q9Mq-ouDU-Jv
 
 const TOTAL_P = 5;            /* puntos de progreso (pasos 1..5) */
 const AGENDA_URL = "https://calendar.app.google/aoxnSs1WVrkhXFLw6";  /* "Agendar videollamada" del sitio */
+const PLAN_CANONICAL_URL = "https://yodesarrollomx.github.io/plan-potencial/";
 
 /* Píxel de Meta — el MISMO que usa el cuestionario de arquitectura
    (aurum-experiencia), para medir todo con una sola fuente. Vacío = apagado. */
@@ -918,6 +931,45 @@ function resumenWa(){
      m2:(+S.m2||0).toLocaleString("es-MX"), frente:(+S.frente||0), tipo:tipo,
      apodo:S.apodo||"(sin nombre)", geo:S.geo||"(no compartió ubicación)", agenda:agenda});
 }
+function enlaceReferido(){
+  const u=new URL(PLAN_CANONICAL_URL);
+  u.searchParams.set("utm_source","referral");
+  u.searchParams.set("utm_medium","share");
+  u.searchParams.set("utm_campaign","plan-potencial");
+  u.searchParams.set("utm_content","resultado");
+  return u.toString();
+}
+function copiarReferido(texto){
+  if(navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(texto);
+  return new Promise(function(resolve,reject){
+    const ta=document.createElement("textarea");
+    ta.value=texto; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy")?resolve():reject(new Error("copy")); }
+    catch(e){ reject(e); }
+    finally{ ta.remove(); }
+  });
+}
+async function compartirPlan(){
+  const msg=document.getElementById("refShareMsg");
+  const url=enlaceReferido();
+  const data={
+    title:T("ref_share_title","Plan de Potencial · Yo Desarrollo"),
+    text:T("ref_share_text","¿Tienes un terreno detenido? Este formulario te ayuda a ordenar el caso y agendar una videollamada inicial sin costo."),
+    url:url
+  };
+  try{
+    let metodo="share";
+    if(navigator.share) await navigator.share(data);
+    else{ metodo="clipboard"; await copiarReferido(data.text+" "+url); }
+    window.__didShare=true;
+    pix("trackCustom","ReferralShare",{content_name:"plan_potencial",method:metodo});
+    if(msg)msg.textContent=metodo==="share"?T("ref_ok_share","Listo para compartir."):T("ref_ok_copy","Enlace copiado. Ya puedes enviarlo.");
+  }catch(e){
+    if(e && e.name==="AbortError") return;
+    if(msg)msg.textContent=T("ref_error","No pudimos copiarlo. Intenta de nuevo.");
+  }
+}
 /* pantalla post-agenda: gracias + WhatsApp + síguenos (oferta 10%) */
 function postAgenda(){
   const pa=document.getElementById("postAgenda"); if(!pa)return;
@@ -925,10 +977,12 @@ function postAgenda(){
   const waNum=T("wa_num","525518331100");
   setH("paWa","https://wa.me/"+waNum+"?text="+encodeURIComponent(resumenWa()));
   setH("paIg",TEXTOS.ig_url||"https://www.instagram.com/yodesarrollo");
-  setH("paFb",TEXTOS.fb_url||"https://www.facebook.com/Yo-Desarrollo-103075448823440/");
+  setH("paFb",TEXTOS.fb_url||"https://www.facebook.com/p/Yo-Desarrollo-100075840402647/");
   const body=pa.parentNode;
-  Array.from(body.children).forEach(c=>{ if(c!==pa) c.style.display="none"; });
+  const ref=document.getElementById("referralBox");
+  Array.from(body.children).forEach(c=>{ if(c!==pa && c!==ref) c.style.display="none"; });
   pa.style.display="block";
+  if(ref)ref.style.display="";
   document.getElementById("livebar").classList.remove("visible");
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -1154,6 +1208,7 @@ function enviarActividad(){
     var body=JSON.stringify({tipo:"actividad",
       paso:(window.__maxPaso==null?0:window.__maxPaso),
       lead:!!window.__didLead, agenda:!!window.__didAgenda, contact:!!window.__didContact,
+      share:!!window.__didShare,
       fuente:(o.utm_source||"(directo)"), hora:String(new Date().getHours())});
     if(navigator.sendBeacon){ navigator.sendBeacon(WEBHOOK_URL,new Blob([body],{type:"text/plain;charset=UTF-8"})); }
     else { fetch(WEBHOOK_URL,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=utf-8"},body:body}).catch(function(){}); }
