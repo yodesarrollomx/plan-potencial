@@ -2,6 +2,57 @@
 
 Este archivo complementa `CLAUDE.md`. Claude y cualquier mantenedor deben leer ambos antes de modificar mensajes comerciales, medición o integraciones.
 
+## 2026-09-28 · Mejora 4: adquisición social por referidos medibles
+
+### Hallazgo que origina el cambio
+
+La auditoría pública encontró audiencias pequeñas (Instagram: 184 seguidores; Facebook: 129), interacción
+visible baja en las publicaciones recientes y enlaces históricos repartidos entre `alexpueblag.github.io`,
+`yodesarrollo.github.io` y `yodesarrollomx.github.io`. Además, el enlace de Facebook del cierre apuntaba al ID
+obsoleto `103075448823440`, mientras la página pública activa usa `100075840402647`.
+
+### Objetivo de negocio
+
+Crear una fuente adicional de adquisición orgánica desde personas que ya completaron el formulario y conocen a
+otro propietario de terreno, conservando una atribución uniforme hasta el nuevo lead.
+
+### Cambios realizados
+
+1. Se añadió después de la agenda principal el CTA “Compartir con alguien que tiene terreno”.
+2. En móvil usa Web Share; en escritorio copia texto + URL al portapapeles.
+3. La URL compartida siempre es la canónica y lleva UTMs de referido:
+   `utm_source=referral&utm_medium=share&utm_campaign=plan-potencial&utm_content=resultado`.
+4. Un éxito dispara `ReferralShare` en Meta y añade `share:true` al beacon de actividad.
+5. El módulo permanece disponible también en el cierre posterior a la agenda.
+6. Se corrigió el respaldo local de Facebook al perfil `100075840402647`.
+7. Se corrigió `TEXTOS POTENCIAL!B132` al mismo perfil activo.
+
+### Contrato conservado
+
+No se modificaron Apps Script, endpoint, folios, campos del lead, consentimiento, agenda ni reglas de
+calificación. `share` es un campo adicional del beacon de actividad, no del payload de lead.
+
+### Validación requerida
+
+1. El CTA aparece debajo de la agenda, no antes del CTA principal.
+2. El fallback copia texto y URL canónica con las cuatro UTMs.
+3. Web Share cancelado no cuenta como compartir ni muestra error.
+4. Un compartir exitoso marca `window.__didShare=true` y dispara `ReferralShare`.
+5. El referido entrante conserva `utm_source=referral` como primer toque.
+6. Después de agendar, el CTA de referido permanece visible.
+7. El enlace de Facebook público y el valor del Sheet apuntan al ID `100075840402647`.
+
+### Métrica para decidir si funcionó
+
+Medir semanalmente: clics/activaciones de compartir, leads con `utm_source=referral`, tasa referido→lead y
+referido→sesión agendada. La métrica principal es sesiones agendadas originadas por referidos, no clics ni
+seguidores.
+
+### Reversión
+
+Revertir el commit de frontend y restaurar `TEXTOS POTENCIAL!B132` únicamente si la página oficial cambia de
+identificador. No eliminar las UTMs de publicaciones nuevas.
+
 ## 2026-09-28 · Velocidad inicial y SEO técnico
 
 ### Objetivo

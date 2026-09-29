@@ -2,6 +2,21 @@
 
 Lee este archivo completo antes de tocar nada.
 
+## ⚠️ ALERTA ACTIVA · 2026-09-28 · Adquisición social y referidos
+
+- **Cambio:** el resultado incorpora un CTA secundario para compartir el Plan de Potencial después de la agenda
+  principal. Usa Web Share en dispositivos compatibles y portapapeles como respaldo.
+- **Atribución:** todo referido apunta a `https://yodesarrollomx.github.io/plan-potencial/` con
+  `utm_source=referral`, `utm_medium=share`, `utm_campaign=plan-potencial` y `utm_content=resultado`.
+- **Medición:** un compartir exitoso dispara `ReferralShare` en Meta y marca `share:true` en el beacon de
+  actividad. No agrega datos personales ni cambia el payload del lead.
+- **Facebook corregido:** la página oficial activa es `100075840402647`; el respaldo local y
+  `TEXTOS POTENCIAL!B132` deben conservar esa URL.
+- **Regla para Claude:** no publicar enlaces nuevos hacia `yodesarrollo.github.io/plan-potencial/` ni hacia
+  versiones personales. La única casa canónica del embudo es `yodesarrollomx.github.io/plan-potencial/`.
+- **Contexto:** publicaciones históricas siguen apuntando a tres hosts. `alexpueblag.github.io` ya redirige y
+  conserva UTMs; `yodesarrollo.github.io` sirve una versión obsoleta y esta cuenta solo tiene permiso de lectura.
+
 ## ⚠️ ALERTA ACTIVA · 2026-09-28 · Rendimiento y SEO técnico
 
 - **Cambio:** Leaflet y su CSS ya no se cargan en la primera pantalla; se solicitan solo al entrar al paso 2
